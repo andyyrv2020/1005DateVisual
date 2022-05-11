@@ -1,23 +1,24 @@
 import moment from 'moment';
+import { interpolate } from 'react-native-reanimated';
+
 export function formatDate(dateString) {
-    const parsed = moment(new Date(dateString));
-    if (!parsed.isValid()) {
-        return Date.now()
+    const parsedDate = moment(new Date(dateString));
+
+    if(!parsedDate.isValid()) { //parsedDate.isValid() == false
+        return Date.now();
     }
 
-    return parsed.format('DD/MM/YY HH:mm');
+    return parsedDate.format('DD/MM/YYYY HH:mm');
 }
-//moment.duration(moment(new Date(eventDate)).diff(new Date()));
-export function getCountdownParts(date) {
-    const duration = moment.duration(
-        moment(new Date(date)).diff(Date.now())
-    );
 
+export function getCountdownParts(eventDate) {
+    const duration = moment.duration(moment(new Date(eventDate))
+        .diff(new Date())); //разлика с текущата дата
+        //дата на събитието - текуща дата = оставащо време (дни, часове, минути, секунди)
     return {
-        days: duration.as('days'),
-        hours: duration.as('hours'),
-        minutes: duration.as('minutes'),
-        seconds: duration.as('seconds')
-    };
-
+        days: parseInt(duration.as('days')),
+        hours: duration.get('hours'),
+        minutes: duration.get('minutes'),
+        seconds: duration.get('seconds')
+    }
 }
